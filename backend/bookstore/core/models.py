@@ -5,6 +5,8 @@ from django.utils import timezone
 from core.managers import UserManager
 from .constants import USER_TYPE_CHOICES
 from django.utils.translation import gettext_lazy as _
+
+
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True, null=True, db_index=True)
