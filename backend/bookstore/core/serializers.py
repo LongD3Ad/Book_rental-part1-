@@ -39,4 +39,4 @@ class RatingSerializer(serializers.ModelSerializer):
 class NewsLetterSerializer(serializers.ModelSerializer):
     class Meta:
         model=NewsLetter
-        fields = '__all__'
+        fields = '__all__'  
