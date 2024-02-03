@@ -1,0 +1,1 @@
+ F:\\GithubRepos\\Book_rental-part1\\frontend\\.dart_tool\\flutter_build\\c0dc28b21d3d1206e4c6f03036430db4\\native_assets.yaml: 
