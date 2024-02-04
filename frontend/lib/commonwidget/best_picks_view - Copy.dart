@@ -30,8 +30,8 @@ class BestPicksView extends StatelessWidget {
                   ]),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  bObj["img"].toString(),
+                child: Image.network(
+                'http://10.0.2.2:8000'+  bObj["image"].toString(),
                   width: media.width * 0.32,
                   height: media.width * 0.6,
                   fit: BoxFit.cover,
@@ -53,7 +53,7 @@ class BestPicksView extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Text(bObj["author"].toString(),
+            Text(bObj["author"]['name'].toString(),
                 maxLines: 1,
                 textAlign: TextAlign.left,
                 style: TextStyle(

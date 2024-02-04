@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:test1/common/color_extension.dart';
 import 'package:test1/view/maintab/maintab_view.dart';
 
+import '../../commonwidget/round_button.dart';
+
 class HelpUsView extends StatefulWidget {
   const HelpUsView({super.key});
 
@@ -10,6 +12,11 @@ class HelpUsView extends StatefulWidget {
 }
 
 class _HelpUsViewState extends State<HelpUsView> {
+ List<String> cities = ['Mangaluru','Hubli','Udupi','Kankanadi'];
+  List<String> states= ['Karnataka','Andra pradesh','Kerala'];
+  String state='';
+  String city='';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,15 +75,19 @@ class _HelpUsViewState extends State<HelpUsView> {
                       borderRadius: BorderRadius.circular(20)),
                   child: DropdownButton(
                     isExpanded: true,
-                    hint: const Text("State"),
+                    hint: Text(state.isEmpty? "State":state),
                     underline: Container(),
-                    items: ["State1", "State2"].map((name) {
+                    items: states.map((name) {
                       return DropdownMenuItem(
                         value: name,
                         child: Text(name),
                       );
                     }).toList(),
-                    onChanged: (selectVal) {},
+                    onChanged: (selectVal) {
+                      setState(() {
+                      state = selectVal!;
+                      });
+                    },
                   )),
               const SizedBox(
                 height: 15,
@@ -89,15 +100,19 @@ class _HelpUsViewState extends State<HelpUsView> {
                       borderRadius: BorderRadius.circular(20)),
                   child: DropdownButton(
                     isExpanded: true,
-                    hint: const Text("City"),
+                    hint: Text(city.isEmpty?'City':city),
                     underline: Container(),
-                    items: ["City1", "City2"].map((name) {
+                    items: cities.map((name) {
                       return DropdownMenuItem(
                         value: name,
                         child: Text(name),
                       );
                     }).toList(),
-                    onChanged: (selectVal) {},
+                    onChanged: (selectVal) {
+                      setState(() {
+                      city = selectVal!;
+                      });
+                    },
                   )),
               const SizedBox(
                 height: 15,
@@ -118,6 +133,12 @@ class _HelpUsViewState extends State<HelpUsView> {
                     ),
                   ),
                 ],
+              ),
+               RoundLineButton(
+                title: "Continue",
+                onPressed: () {
+                
+                  },
               )
             ],
           ),

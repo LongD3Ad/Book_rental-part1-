@@ -12,14 +12,11 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StoreSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model=Store
         fields = '__all__'
 
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Book
-        fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +37,16 @@ class NewsLetterSerializer(serializers.ModelSerializer):
     class Meta:
         model=NewsLetter
         fields = '__all__'  
+
+
+
+class BookSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer()
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Book
+        fields = '__all__'
+
+    def get_rating(self, obj):
+        return obj.get_rating()

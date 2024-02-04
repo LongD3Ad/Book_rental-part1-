@@ -5,7 +5,7 @@ from django.utils import timezone
 from core.managers import UserManager
 from .constants import USER_TYPE_CHOICES
 from django.utils.translation import gettext_lazy as _
-
+from django.db.models import Avg
 
 class CustomUser(AbstractUser):
     username=None
@@ -43,6 +43,7 @@ class Address(models.Model):
 class Store(models.Model):
     name=models.CharField(max_length=20)
     about=models.TextField()
+    image=models.ImageField(upload_to='store/')
 
     def No_of_Books(self):
         return len(Book.objects.filter(store=self.id))
@@ -70,6 +71,11 @@ class Book(models.Model):
         return self.name
     def get_categories(self):
         return self.categories.split(',')
+    def get_rating(self):
+            ratings = Rating.objects.filter(bood_id=self)
+            if ratings.exists():
+                return ratings.aggregate(Avg('rating'))['rating__avg']
+            return None
 
 
 class Order(models.Model):

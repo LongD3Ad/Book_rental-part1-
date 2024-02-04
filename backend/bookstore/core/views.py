@@ -50,12 +50,13 @@ def set_address(request):
     
 
 class IndexView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = []
 
     def get(self,request):
         book_objs=BookSerializer(Book.objects.all(),many=True)
-        return Response({'books':book_objs})
+        store_objs=StoreSerializer(Store.objects.all(),many=True)
+        return Response({'books':book_objs.data,'store':store_objs.data})
         
     def post(self,request):
         if request.data.get('type')=='1':

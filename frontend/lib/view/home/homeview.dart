@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test1/common/color_extension.dart';
 import 'package:test1/commonwidget/best_picks_view%20-%20Copy.dart';
 import 'package:test1/commonwidget/genre_view%20-%20Copy%20-%20Copy.dart';
@@ -22,44 +25,45 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   TextEditingController txtName = TextEditingController();
   TextEditingController txtEmailAddress = TextEditingController();
-  List topPickArr = [
-    {
-      "name": "The Dissapearance of Emila Zola",
-      "author": "Michael Rosen",
-      "img": "assets/img/1.jpg"
-    },
-    {
-      "name": "Fatherhood",
-      "author": "Marcus Berkmann",
-      "img": "assets/img/2.jpg"
-    },
-    {
-      "name": "The Time Travellers Handbook",
-      "author": "Stride Lottie",
-      "img": "assets/img/3.jpg"
-    }
-  ];
-
-  List bestArr = [
-    {
-      "name": "Fatherhood",
-      "author": "by Christopher Wilson",
-      "img": "assets/img/4.jpg",
-      "rating": 5.0
-    },
-    {
-      "name": "Tattletale",
-      "author": "by Sarah J. Noughton",
-      "img": "assets/img/5.jpg",
-      "rating": 4.0
-    },
-    {
-      "name": "In A Land Of Paper Gods",
-      "author": "by Rebecca Mackenzie",
-      "img": "assets/img/6.jpg",
-      "rating": 5.0
-    }
-  ];
+  // List topPickArr = [
+  //   {
+  //     "name": "The Dissapearance of Emila Zola",
+  //     "author": "Michael Rosen",
+  //     "img": "assets/img/1.jpg"
+  //   },
+  //   {
+  //     "name": "Fatherhood",
+  //     "author": "Marcus Berkmann",
+  //     "img": "assets/img/2.jpg"
+  //   },
+  //   {
+  //     "name": "The Time Travellers Handbook",
+  //     "author": "Stride Lottie",
+  //     "img": "assets/img/3.jpg"
+  //   }
+  // ];
+  List topPickArr = [];
+  List bestArr = [];
+  //  [
+  //   {
+  //     "name": "Fatherhood",
+  //     "author": "by Christopher Wilson",
+  //     "img": "assets/img/4.jpg",
+  //     "rating": 5.0
+  //   },
+  //   {
+  //     "name": "Tattletale",
+  //     "author": "by Sarah J. Noughton",
+  //     "img": "assets/img/5.jpg",
+  //     "rating": 4.0
+  //   },
+  //   {
+  //     "name": "In A Land Of Paper Gods",
+  //     "author": "by Rebecca Mackenzie",
+  //     "img": "assets/img/6.jpg",
+  //     "rating": 5.0
+  //   }
+  // ];
 
   List genreArr = [
     {
@@ -93,6 +97,22 @@ class _HomeViewState extends State<HomeView> {
       "img": "assets/img/rec3.jpg"
     }
   ];
+
+  Future<void> fetchData() async {
+    var prefs = await SharedPreferences.getInstance();
+    print(
+        'this is main part: ${jsonDecode(prefs.getString('data')!)['books']}');
+    setState(() {
+      bestArr = jsonDecode(prefs.getString('data')!)['books'];
+      topPickArr = jsonDecode(prefs.getString('data')!)['store'];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +152,7 @@ class _HomeViewState extends State<HomeView> {
                       elevation: 0,
                       title: const Row(children: [
                         Text(
-                          "Our Top Picks",
+                          "Best sellers",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,
@@ -154,33 +174,37 @@ class _HomeViewState extends State<HomeView> {
                     SizedBox(
                       height: media.width * 0.1,
                     ),
-                    SizedBox(
-                      width: media.width,
-                      height: media.width * 0.8,
-                      child: CarouselSlider.builder(
-                        itemCount: topPickArr.length,
-                        itemBuilder: (BuildContext context, int itemIndex,
-                            int pageViewIndex) {
-                          var iObj = topPickArr[itemIndex] as Map? ?? {};
-                          return TopPicksView(
-                            iObj: iObj,
-                          );
-                        },
-                        options: CarouselOptions(
-                          aspectRatio: 0.7, //can cause render yellow error
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          viewportFraction: 0.4,
-                          enlargeFactor: 0.4,
-                          enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                        ),
-                      ),
-                    ),
+                    topPickArr.length == 0
+                        ? Container()
+                        : SizedBox(
+                            width: media.width,
+                            height: media.width * 0.8,
+                            child: CarouselSlider.builder(
+                              itemCount: topPickArr.length,
+                              itemBuilder: (BuildContext context, int itemIndex,
+                                  int pageViewIndex) {
+                                var iObj = topPickArr[itemIndex] as Map? ?? {};
+                                return TopPicksView(
+                                  iObj: iObj,
+                                );
+                              },
+                              options: CarouselOptions(
+                                aspectRatio:
+                                    0.7, //can cause render yellow error
+                                autoPlay: true,
+                                enlargeCenterPage: true,
+                                viewportFraction: 0.4,
+                                enlargeFactor: 0.4,
+                                enlargeStrategy:
+                                    CenterPageEnlargeStrategy.scale,
+                              ),
+                            ),
+                          ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(children: [
                         Text(
-                          "Bestsellers",
+                          "Our Top Picks",
                           style: TextStyle(
                               color: TColor.text,
                               fontSize: 25,
@@ -326,13 +350,34 @@ class _HomeViewState extends State<HomeView> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 MinRoundLineButton(
-                                  title: "Sign Up",
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SignUpView()));
+                                  title: "subscribe",
+                                  onPressed: () async {
+                                    var prefs =
+                                        await SharedPreferences.getInstance();
+                                    http.post(
+                                        Uri.parse('http://10.0.2.2:8000/api/'),
+                                        headers: {
+                                          "Authorization":
+                                              "Bearer ${prefs.getString('access_token')}"
+                                        },
+                                        body: {
+                                          'type': "1",
+                                          'name': txtName.text,
+                                          "email": txtEmailAddress.text
+                                        }).then((value) {
+                                      txtEmailAddress.clear();
+                                      txtName.clear();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(jsonDecode(
+                                              value.body)['message']),
+                                          duration: Duration(
+                                              seconds:
+                                                  2), // Adjust the duration as needed
+                                        ),
+                                      );
+                                    });
                                   },
                                 )
                               ],

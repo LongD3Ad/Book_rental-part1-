@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test1/common/color_extension.dart';
 import 'package:test1/commonwidget/round_button.dart';
 import 'package:test1/commonwidget/round_textfield.dart';
 import 'package:test1/view/login/helpus_view.dart';
+import 'package:http/http.dart' as http;
+import '../maintab/maintab_view.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -116,12 +121,41 @@ class _SignUpViewState extends State<SignUpView> {
               ),
               RoundLineButton(
                 title: "Sign Up",
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HelpUsView()));
-                },
+                onPressed: ()async {
+try {
+                    var response = await http.post(
+                        Uri.parse('http://10.0.2.2:8000/api/create-user/'),
+                        body: {
+                          'name':txtFirstName,
+                          'phone':txtMobilePhone,
+                          "email": txtEmail.text,
+                          "password": txtPassword.text
+                        });
+                    // print(jsonDecode(response.body)['access']);
+
+// save token in local storage //shared preferences
+                    if (response.statusCode == 200) {
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setString(
+                          'access_token', jsonDecode(response.body)['access']);
+                      prefs.setString('refresh_token',
+                          jsonDecode(response.body)['refresh']);
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainTabView()));
+                    } else {ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Invalid Credentials'),
+        duration: Duration(seconds: 2), // Adjust the duration as needed
+      ),
+    );}
+                  } catch (e) {
+                    print(e.toString());
+                  }
+
+                  },
               )
             ],
           ),
