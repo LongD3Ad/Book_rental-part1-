@@ -1,0 +1,43 @@
+name: test1
+description: "A new Flutter project."
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  carousel_slider: ^4.2.1
+  flutter_rating_bar: ^4.0.1
+  http:
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/img/
+    - assets/fonts/
+
+  fonts:
+     - family: SF Pro Text
+       fonts:
+        - asset: assets\fonts\SF-Pro-Text-Black.otf
+        - asset: assets\fonts\SF-Pro-Text-Bold.otf
+        - asset: assets\fonts\SF-Pro-Text-Heavy.otf
+        - asset: assets\fonts\SF-Pro-Text-Light.otf
+        - asset: assets\fonts\SF-Pro-Text-Medium.otf
+        - asset: assets\fonts\SF-Pro-Text-Regular.otf
+        - asset: assets\fonts\SF-Pro-Text-Semibold.otf
+        - asset: assets\fonts\SF-Pro-Text-Thin.otf
+        - asset: assets\fonts\SF-Pro-Text-Ultralight.otf
