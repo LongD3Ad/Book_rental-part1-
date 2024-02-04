@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test1/common/color_extension.dart';
+import 'package:test1/view/maintab/maintab_view.dart';
 
 class HelpUsView extends StatefulWidget {
   const HelpUsView({super.key});
@@ -105,7 +106,12 @@ class _HelpUsViewState extends State<HelpUsView> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainTabView()));
+                    },
                     child: Text(
                       "Skip",
                       style: TextStyle(color: TColor.primary),

@@ -67,3 +67,40 @@ class RoundLineButton extends StatelessWidget {
         states.contains(MaterialState.pressed) ? colorPressed : color);
   }
 }
+
+class MinRoundLineButton extends StatelessWidget {
+  final String title;
+  final VoidCallback onPressed;
+
+  const MinRoundLineButton(
+      {super.key, required this.title, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.resolveWith((states) => TColor.primary),
+        foregroundColor:
+            MaterialStateProperty.resolveWith((states) => Colors.white),
+        shadowColor:
+            MaterialStateProperty.resolveWith((states) => TColor.primaryLight),
+        shape: MaterialStateProperty.resolveWith(
+          (states) => RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
+
+  MaterialStateProperty<Color> getColor(Color color, Color colorPressed) {
+    return MaterialStateProperty.resolveWith((states) =>
+        states.contains(MaterialState.pressed) ? colorPressed : color);
+  }
+}
